@@ -1,7 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from apps.courses.models import Course
-from apps.users.models import User
+
+from courses.models import Course
+from users.models import User
 
 
 class Assignment(models.Model):

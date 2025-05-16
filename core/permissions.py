@@ -20,3 +20,21 @@ class IsEnrolledStudent(BasePermission):
 
     def has_object_permission(self, request, view, obj):
         return request.user.is_student() and obj.students.filter(id=request.user.id).exists()
+
+
+from rest_framework import permissions
+
+
+class IsAdminOrSelf(permissions.BasePermission):
+    
+
+    def has_object_permission(self, request, view, obj):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        # Instance must be the user themselves or an admin
+        if hasattr(obj, 'user'):  # For Profile objects
+            return obj.user == request.user or request.user.is_staff
+        return obj == request.user or request.user.is_staff  # For User objects
