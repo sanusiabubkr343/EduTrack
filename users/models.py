@@ -31,10 +31,13 @@ class Profile(models.Model):
         return f"{self.user.username}'s Profile"
 
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+
+
 
 
 @receiver(post_save, sender=User)
