@@ -3,16 +3,17 @@ from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
 
 urlpatterns = [
+    # API Endpoints
+    path("admin/", admin.site.urls),
+    path('auth/', include('users.urls')),
+    path('courses/', include('courses.urls')),
+    path('assignments/', include('assignments.urls')),
+    # Health Check
+    path('health/', include('health_check.urls')),
     # Admin Panel
     path('admin/', admin.site.urls),
     # API Documentation
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    # API Endpoints
-    path('api/auth/', include('users.urls')),
-    path('api/courses/', include('courses.urls')),
-    path('api/assignments/', include('assignments.urls')),
-    # Health Check
-    path('health/', include('health_check.urls')),
+    path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/v1/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

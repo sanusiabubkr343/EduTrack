@@ -13,15 +13,18 @@ from .serializers import (
     SubmissionCreateSerializer,
     SubmissionGradeSerializer,
 )
+from drf_spectacular.utils import extend_schema
+from rest_framework.permissions import IsAuthenticated
 
 
+@extend_schema(tags=["Assignment"])
 class AssignmentViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows assignments to be viewed or edited.
     """
 
     queryset = Assignment.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -30,11 +33,11 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create', 'update', 'partial_update', 'destroy']:
-            permission_classes = [permissions.IsAuthenticated, IsCourseTeacher]
+            permission_classes = [IsAuthenticated, IsCourseTeacher]
         elif self.action in ['retrieve', 'list']:
-            permission_classes = [permissions.IsAuthenticated, IsEnrolledStudent | IsCourseTeacher]
+            permission_classes = [IsAuthenticated, IsEnrolledStudent | IsCourseTeacher]
         else:
-            permission_classes = [permissions.IsAuthenticated]
+            permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]
 
     def get_queryset(self):
@@ -62,13 +65,15 @@ class AssignmentViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(tags=["Assignment"])
+
 class SubmissionViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows assignment submissions to be viewed or edited.
     """
 
     queryset = Submission.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -79,11 +84,11 @@ class SubmissionViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ['create']:
-            permission_classes = [permissions.IsAuthenticated, IsEnrolledStudent]
+            permission_classes = [IsAuthenticated, IsEnrolledStudent]
         elif self.action in ['update', 'partial_update']:
-            permission_classes = [permissions.IsAuthenticated, IsCourseTeacher]
+            permission_classes = [IsAuthenticated, IsCourseTeacher]
         elif self.action in ['retrieve', 'list']:
-            permission_classes = [permissions.IsAuthenticated, IsEnrolledStudent | IsCourseTeacher]
+            permission_classes = [IsAuthenticated, IsEnrolledStudent | IsCourseTeacher]
         else:
             permission_classes = [permissions.IsAuthenticated]
         return [permission() for permission in permission_classes]

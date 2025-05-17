@@ -8,8 +8,10 @@ User = get_user_model()
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['bio', 'institution']
-        read_only_fields = ['user']
+        fields = ['bio', 'institution', 'user']
+        read_only_fields = [
+            'user',
+        ]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -55,7 +57,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'role']
+        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'role']
 
     def create(self, validated_data):
         user = User.objects.create_user(
@@ -67,3 +69,24 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             role=validated_data['role'],
         )
         return user
+
+
+class CustomTokenSerializer(serializers.Serializer):
+    access = serializers.CharField()
+    refresh = serializers.CharField()
+
+
+class LoginUserSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True, write_only=True)
+    tokens = CustomTokenSerializer(read_only=True)
+    user_data = UserRegistrationSerializer(read_only=True)
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "tokens",
+            "email",
+            "password",
+            "user_data",
+        ]

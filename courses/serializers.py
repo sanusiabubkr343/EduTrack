@@ -6,7 +6,7 @@ from .models import Course, Enrollment
 
 class CourseSerializer(serializers.ModelSerializer):
     teacher = UserSerializer(read_only=True)
-    students = UserSerializer(many=True, read_only=True)
+    students = serializers.StringRelatedField(many=True)
     is_teacher = serializers.SerializerMethodField()
     is_enrolled = serializers.SerializerMethodField()
 
