@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'assignments',
     # Third-party
     'rest_framework',
+    'rest_framework_simplejwt',
     'drf_spectacular',
     'django_filters',
 ]

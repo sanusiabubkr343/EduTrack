@@ -16,6 +16,7 @@ class Course(models.Model):
         return self.title
 
     def clean(self):
+        print(self.teacher.role)
         if not self.teacher.is_teacher():
             raise ValidationError("Only teachers can create courses.")
 

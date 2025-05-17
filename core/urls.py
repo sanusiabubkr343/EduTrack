@@ -8,8 +8,6 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('courses/', include('courses.urls')),
     path('assignments/', include('assignments.urls')),
-    # Health Check
-    path('health/', include('health_check.urls')),
     # Admin Panel
     path('admin/', admin.site.urls),
     # API Documentation
