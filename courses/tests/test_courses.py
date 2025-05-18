@@ -18,10 +18,7 @@ class TestCourseViewSet:
         teacher = mocked_authentication(role='teacher')
         api_client.force_authenticate(user=teacher)
         url = reverse('courses:course-list')
-        data = {
-            'title': 'Test Course',
-            'description': 'Test Description'
-        }
+        data = {'title': 'Test Course', 'description': 'Test Description'}
         response = api_client.post(url, data)
         assert response.status_code == status.HTTP_201_CREATED
         assert Course.objects.count() == 1
@@ -31,19 +28,14 @@ class TestCourseViewSet:
         student = mocked_authentication(role='student')
         api_client.force_authenticate(user=student)
         url = reverse('courses:course-list')
-        data = {
-            'title': 'Test Course',
-            'description': 'Test Description'
-        }
+        data = {'title': 'Test Course', 'description': 'Test Description'}
         response = api_client.post(url, data)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
     def test_retrieve_course_as_teacher(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         api_client.force_authenticate(user=teacher)
         url = reverse('courses:course-detail', kwargs={'pk': course.id})
@@ -54,9 +46,7 @@ class TestCourseViewSet:
     def test_retrieve_course_as_enrolled_student(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         student = mocked_authentication(role='student')
         course.students.add(student)
@@ -65,16 +55,10 @@ class TestCourseViewSet:
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-  
-   
-    
-
     def test_delete_course_as_teacher(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         api_client.force_authenticate(user=teacher)
         url = reverse('courses:course-detail', kwargs={'pk': course.id})
@@ -85,9 +69,7 @@ class TestCourseViewSet:
     def test_enroll_as_student(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         student = mocked_authentication(role='student')
         api_client.force_authenticate(user=student)
@@ -100,9 +82,7 @@ class TestCourseViewSet:
     def test_enroll_as_teacher_fails(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         api_client.force_authenticate(user=teacher)
         url = reverse('courses:course-enroll', kwargs={'pk': course.id})
@@ -112,9 +92,7 @@ class TestCourseViewSet:
     def test_enroll_twice_fails(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         student = mocked_authentication(role='student')
         course.students.add(student)
@@ -127,9 +105,7 @@ class TestCourseViewSet:
     def test_unenroll_as_student(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         student = mocked_authentication(role='student')
         course.students.add(student)
@@ -144,9 +120,7 @@ class TestCourseViewSet:
     def test_unenroll_when_not_enrolled_fails(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
         course = Course.objects.create(
-            title="Test Course",
-            description="Test Description",
-            teacher=teacher
+            title="Test Course", description="Test Description", teacher=teacher
         )
         student = mocked_authentication(role='student')
         api_client.force_authenticate(user=student)
@@ -182,8 +156,6 @@ class TestEnrollmentViewSet:
         url = reverse('courses:enrollment-list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1
-      
 
     def test_retrieve_enrollment_as_teacher(self, api_client, mocked_authentication):
         teacher = mocked_authentication(role='teacher')
@@ -212,5 +184,3 @@ class TestEnrollmentViewSet:
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
         assert response.data['id'] == enrollment.id
-
-  

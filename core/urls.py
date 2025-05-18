@@ -8,8 +8,6 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('courses/', include('courses.urls')),
     path('assignments/', include('assignments.urls')),
-    # Admin Panel
-    path('admin/', admin.site.urls),
     # API Documentation
     path('api/v1/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/v1/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),

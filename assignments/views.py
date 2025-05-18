@@ -1,4 +1,4 @@
-from rest_framework import viewsets, permissions, status
+from rest_framework import viewsets, permissions, status, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -15,6 +15,7 @@ from .serializers import (
 )
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 @extend_schema(tags=["Assignment"])
@@ -25,6 +26,12 @@ class AssignmentViewSet(viewsets.ModelViewSet):
 
     queryset = Assignment.objects.all()
     permission_classes = [IsAuthenticated]
+    # filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    # filterset_fields = ['course', 'submissions__reiewed']
+    # search_fields = [
+    #     'title',
+    #     'description',
+    # ]
 
     def get_serializer_class(self):
         if self.action == 'create':
